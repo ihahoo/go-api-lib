@@ -8,16 +8,12 @@ import (
 	valid "github.com/asaskevich/govalidator"
 )
 
-const (
-	mobile string = "^(\\+?0?86\\-?)?1[345789]\\d{9}$"
-)
-
-var (
-	rxMobile = regexp.MustCompile(mobile)
-)
-
-// E ...
-type E map[string]interface{}
+// E 返回的错误信息
+type E struct {
+	Status int
+	Code   int
+	Msg    string
+}
 
 // IsEmpty 检查值是否是空
 func IsEmpty(s interface{}) bool {
@@ -45,10 +41,10 @@ func IsEmpty(s interface{}) bool {
 // Required 检查是否为空
 func Required(v interface{}, name string) (E, bool) {
 	if IsEmpty(v) {
-		return E{"status": 422, "code": 400001, "msg": name + "不能为空"}, false
+		return E{422, 400001, name + "不能为空"}, false
 	}
 
-	return nil, true
+	return E{}, true
 }
 
 // Email 检查是否是Email
@@ -59,19 +55,19 @@ func Email(v string, isRequired bool, name string) (E, bool) {
 		}
 	}
 	if !valid.IsEmail(v) {
-		return E{"status": 422, "code": 400004, "msg": name + "格式不正确"}, false
+		return E{422, 400004, name + "格式不正确"}, false
 	}
 
-	return nil, true
+	return E{}, true
 }
 
 // MinLength 字符的最小长度
 func MinLength(v string, length int, name string) (E, bool) {
 	if len(v) < length {
-		return E{"status": 422, "code": 400005, "msg": name + "不能少于" + strconv.Itoa(length) + "个字符"}, false
+		return E{422, 400005, name + "不能少于" + strconv.Itoa(length) + "个字符"}, false
 	}
 
-	return nil, true
+	return E{}, true
 }
 
 // Mobile 手机号码
@@ -83,10 +79,10 @@ func Mobile(v string, isRequired bool, name string) (E, bool) {
 	}
 	rxMobile := regexp.MustCompile("^(\\+?0?86\\-?)?1[345789]\\d{9}$")
 	if !rxMobile.MatchString(v) {
-		return E{"status": 422, "code": 400021, "msg": name + "错误"}, false
+		return E{422, 400021, name + "错误"}, false
 	}
 
-	return nil, true
+	return E{}, true
 }
 
 // UUID uuid
@@ -97,10 +93,10 @@ func UUID(v string, isRequired bool, name string) (E, bool) {
 		}
 	}
 	if !valid.IsUUID(v) {
-		return E{"status": 422, "code": 400002, "msg": name + "格式错误"}, false
+		return E{422, 400002, name + "格式错误"}, false
 	}
 
-	return nil, true
+	return E{}, true
 }
 
 // RealName 汉字姓名
@@ -112,10 +108,10 @@ func RealName(v string, isRequired bool, name string) (E, bool) {
 	}
 	rxRealName := regexp.MustCompile("^[\u2E80-\uFE4F]{2,10}$")
 	if !rxRealName.MatchString(v) {
-		return E{"status": 422, "code": 400002, "msg": name + "格式错误"}, false
+		return E{422, 400002, name + "格式错误"}, false
 	}
 
-	return nil, true
+	return E{}, true
 }
 
 // IDCard 身份证
@@ -127,8 +123,8 @@ func IDCard(v string, isRequired bool, name string) (E, bool) {
 	}
 	rxIDCard := regexp.MustCompile("(^\\d{18}$)|(^\\d{17}(\\d|X|x)$)")
 	if !rxIDCard.MatchString(v) {
-		return E{"status": 422, "code": 400002, "msg": name + "格式错误"}, false
+		return E{422, 400002, name + "格式错误"}, false
 	}
 
-	return nil, true
+	return E{}, true
 }
