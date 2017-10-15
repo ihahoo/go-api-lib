@@ -2,6 +2,8 @@ package utils
 
 import (
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 // ResTime 返回UTC时间，用ISO8601格式化。YYYY-MM-DDTHH:MM:SSZ
@@ -17,16 +19,10 @@ func ReqDate(s string) time.Time {
 
 // ResError 返回错误，JSON格式，例{ "errcode": 000001, "errmsg": "参数错误" }
 func ResError(c *gin.Context, status int, errcode int, errmsg string) {
-	c.JSON(status, gin.H{
-		"errcode": errcode,
-		"errmsg":  errmsg,
-	})
+	c.JSON(status, gin.H{"errcode": errcode, "errmsg": errmsg})
 }
 
 // ResAPIError 返回后端api间调用错误，status始终为200
 func ResAPIError(c *gin.Context, errcode int, errmsg string) {
-	c.JSON(200, gin.H{
-		"errcode": errcode,
-		"errmsg":  errmsg,
-	})
+	c.JSON(200, gin.H{"errcode": errcode, "errmsg": errmsg})
 }
