@@ -128,3 +128,18 @@ func IDCard(v string, isRequired bool, name string) (E, bool) {
 
 	return E{}, true
 }
+
+// MD5 MD5
+func MD5(v string, isRequired bool, name string) (E, bool) {
+	if isRequired {
+		if info, ok := Required(v, name); !ok {
+			return info, false
+		}
+	}
+	rxMD5 := regexp.MustCompile("^[a-f0-9]{32}$")
+	if !rxMD5.MatchString(v) {
+		return E{422, 400002, name + "格式错误"}, false
+	}
+
+	return E{}, true
+}

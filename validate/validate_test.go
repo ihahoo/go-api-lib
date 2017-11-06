@@ -91,3 +91,13 @@ func TestIDCard(t *testing.T) {
 	test3, _ := IDCard("31011019830911143X", false, "IDCard")
 	assert.Equal(t, test3, E{}, "IDCard test3正确，不应有错误信息返回")
 }
+
+func TestMD5(t *testing.T) {
+	test1, ok1 := MD5("fc5e038d38a57032085441e7fe7010b", true, "MD5")
+	assert.Equal(t, ok1, false, "MD5 test1应该返回错误")
+	assert.Equal(t, test1, E{422, 400002, "MD5格式错误"}, "MD5 test1应该返回正确的错误数据")
+
+	test2, ok2 := MD5("fc5e038d38a57032085441e7fe7010b0", true, "MD5")
+	assert.Equal(t, ok2, true, "MD5 test2应该返回正确")
+	assert.Equal(t, test2, E{}, "MD5 test2正确，不应有错误信息返回")
+}
