@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ihahoo/go-api-lib/validate"
+	"github.com/ihahoo/go-api-lib/errors"
 )
 
 // ResTime 返回UTC时间，用ISO8601格式化。YYYY-MM-DDTHH:MM:SSZ
@@ -23,8 +23,8 @@ func ResError(c *gin.Context, status int, errcode int, errmsg string) {
 	c.JSON(status, gin.H{"errcode": errcode, "errmsg": errmsg})
 }
 
-// ResValidError 返回validate检测的错误，JSON格式，例{ "errcode": 000001, "errmsg": "参数错误" }
-func ResValidError(c *gin.Context, e validate.E) {
+// ResE 用errors.E返回错误，JSON格式，例{ "errcode": 000001, "errmsg": "参数错误" }
+func ResE(c *gin.Context, e errors.E) {
 	c.JSON(e.Status, gin.H{"errcode": e.Code, "errmsg": e.Msg})
 }
 
