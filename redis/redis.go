@@ -36,6 +36,6 @@ func Connect(db int, prePath string) *redis.Client {
 }
 
 // Conn 用配置文件的默认参数连接数据库
-func Conn() *redis.Client {
-	return Connect("redis.")
+func Conn(db int) *redis.Client {
+	return Connect(db, "redis.")
 }
