@@ -7,6 +7,13 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// Client 默认数据库实例
+var Client *sql.DB
+
+func init() {
+	Client = Conn()
+}
+
 // ConnectDB 用连接字符串连接数据库
 func ConnectDB(dataSourceName string) (*sql.DB, error) {
 	db, err := sql.Open("postgres", dataSourceName)

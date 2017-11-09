@@ -7,6 +7,19 @@ import (
 	"github.com/ihahoo/go-api-lib/log"
 )
 
+// DB redis实例
+var DB *redis.Client
+
+// Client Redis client
+type Client = redis.Client
+
+// Options ...
+type Options = redis.Options
+
+func init() {
+	DB = Conn(0)
+}
+
 // ConnectDB 连接redis
 func ConnectDB(opt *redis.Options) (*redis.Client, error) {
 	client := redis.NewClient(opt)
@@ -23,14 +36,13 @@ func Connect(db int, prePath string) *redis.Client {
 	port := config.GetString(prePath + "port")
 	password := config.GetString(prePath + "password")
 
-	client, err := Conn(&redis.Options{
+	client, err := ConnectDB(&redis.Options{
 		Addr:     host + ":" + port,
 		Password: password,
 		DB:       db,
 	})
 	if err != nil {
-		logger := log.GetLog()
-		logger.WithFields(logger.Fields{"func": "redis.Client"}).Fatal(err)
+		log.GetLog().WithFields(log.Fields{"func": "redis.Connect"}).Fatal(err)
 	}
 	return client
 }
