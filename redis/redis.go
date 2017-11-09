@@ -7,8 +7,7 @@ import (
 	"github.com/ihahoo/go-api-lib/log"
 )
 
-// DB redis实例
-var DB *redis.Client
+var dbs map[int]*redis.Client
 
 // Client Redis client
 type Client = redis.Client
@@ -17,7 +16,20 @@ type Client = redis.Client
 type Options = redis.Options
 
 func init() {
-	DB = Conn(0)
+	dbs = make(map[int]*redis.Client)
+}
+
+// Init 初始化数据库
+func Init(db int) {
+	dbs[db] = Conn(db)
+}
+
+// DB 获取连接的实例
+func DB(db int) *redis.Client {
+	if v, ok := dbs[db]; ok {
+		return v
+	}
+	return nil
 }
 
 // ConnectDB 连接redis
